@@ -30,9 +30,9 @@ const commentCrud = async () => {
 
         // UPDATE
         // modify the properties of a comment
-        foundComment.content = '🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈'
-        // save the parent doc (this is async)
-        await newBlog.save()
+        // foundComment.content = '🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈'
+        // // save the parent doc (this is async)
+        // await newBlog.save()
 
         // DESTROY
         // .remove() is a subdocument instance method
@@ -45,4 +45,43 @@ const commentCrud = async () => {
     }
 }
 
-commentCrud()
+// commentCrud()
+
+const userCrud = async () => {
+    try {
+        // // CREATE (associate)
+        // const newUser = await db.User.create({
+        //     name: 'Weston'
+        // })
+
+        // // find a blog to associate w the user
+        // const foundBlog = await db.Blog.findOne({}) // find one blog -- the first one you bump into
+
+        // // push the blog into the user's array of blogs
+        // newUser.blogs.push(foundBlog)
+        
+        // // add the user as the blog's blogger
+        // foundBlog.blogger = newUser
+
+        // // save both models (this is async)
+        // await newUser.save()
+        // await foundBlog.save()
+
+        // READ (query population)
+        // .populate('field to populate')
+        // const foundUser = await db.User.findOne({ name: 'Weston' }).populate('blogs')
+        // console.log(foundUser)
+        // populate a field in something being populated
+        const foundUser = await db.User.findOne({ name: 'Weston' }).populate({
+            path: 'blogs',
+            populate: {
+                path: 'blogger'
+            }
+        })
+        console.log(foundUser.blogs[0].blogger)
+    } catch(err) {
+        console.log(err)
+    }
+}
+
+userCrud()
